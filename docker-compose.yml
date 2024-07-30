@@ -32,6 +32,8 @@ services:
       - mysql
 
   slurmctld:
+    cap_add: 
+        - SYS_TIME
     image: slurm-docker-cluster:${IMAGE_TAG:-21.08}
     command: ["slurmctld"]
     container_name: slurmctld

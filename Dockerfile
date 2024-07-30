@@ -6,6 +6,11 @@ LABEL org.opencontainers.image.source="https://github.com/giovtorres/slurm-docke
       org.label-schema.docker.cmd="docker-compose up -d" \
       maintainer="Giovanni Torres"
 
+ARG SLURM_TAG=slurm-21-08-6-1
+ARG GOSU_VERSION=1.11
+
+SHELL ["/bin/bash", "-c"]
+
 RUN set -ex \
     && yum makecache \
     && yum -y update \
@@ -39,8 +44,6 @@ RUN alternatives --set python /usr/bin/python3
 
 RUN pip3 install Cython nose
 
-ARG GOSU_VERSION=1.11
-
 RUN set -ex \
     && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64" \
     && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64.asc" \
@@ -51,11 +54,9 @@ RUN set -ex \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-ARG SLURM_TAG=slurm-21-08-6-1
-
 RUN set -x \
-    && git clone -b ${SLURM_TAG} --single-branch --depth=1 https://github.com/SchedMD/slurm.git \
-    && pushd slurm \
+    && git clone --single-branch --depth=1 https://github.com/metaterminal/eco-slurm.git \
+    && pushd eco-slurm \
     && ./configure --enable-debug --prefix=/usr --sysconfdir=/etc/slurm \
         --with-mysql_config=/usr/bin  --libdir=/usr/lib64 \
     && make install \
