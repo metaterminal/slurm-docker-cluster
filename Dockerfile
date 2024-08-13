@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.source="https://github.com/giovtorres/slurm-docke
       org.label-schema.docker.cmd="docker-compose up -d" \
       maintainer="Giovanni Torres"
 
-ARG SLURM_TAG=slurm-21-08-6-1
+ARG SLURM_TAG=slurm-100
 ARG GOSU_VERSION=1.11
 
 SHELL ["/bin/bash", "-c"]
@@ -55,7 +55,7 @@ RUN set -ex \
     && gosu nobody true
 
 RUN set -x \
-    && git clone --single-branch --depth=1 https://github.com/metaterminal/eco-slurm.git \
+    && git clone --single-branch --branch $SLURM_TAG --depth=1 https://github.com/metaterminal/eco-slurm.git \
     && pushd eco-slurm \
     && ./configure --enable-debug --prefix=/usr --sysconfdir=/etc/slurm \
         --with-mysql_config=/usr/bin  --libdir=/usr/lib64 \
@@ -65,7 +65,7 @@ RUN set -x \
     && install -D -m644 etc/slurmdbd.conf.example /etc/slurm/slurmdbd.conf.example \
     && install -D -m644 contribs/slurm_completion_help/slurm_completion.sh /etc/profile.d/slurm_completion.sh \
     && popd \
-    && rm -rf slurm \
+    && rm -rf eco-slurm \
     && groupadd -r --gid=990 slurm \
     && useradd -r -g slurm --uid=990 slurm \
     && mkdir /etc/sysconfig/slurm \
