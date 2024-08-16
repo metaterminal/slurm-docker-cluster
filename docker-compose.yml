@@ -24,7 +24,7 @@ services:
     hostname: slurmdbd
     volumes:
       - etc_munge:/etc/munge
-      - etc_slurm:/etc/slurm
+      - ./slurm.conf:/etc/slurm/slurm.conf
       - var_log_slurm:/var/log/slurm
     expose:
       - "6819"
@@ -41,6 +41,8 @@ services:
     volumes:
       - etc_munge:/etc/munge
       - etc_slurm:/etc/slurm
+      - ./slurm.conf:/etc/slurm/slurm.conf
+      - ./slurmdbd.conf:/etc/slurm/slurmdbd.conf
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
     expose:
@@ -56,6 +58,7 @@ services:
     volumes:
       - etc_munge:/etc/munge
       - etc_slurm:/etc/slurm
+      - ./slurmdbd.conf:/etc/slurm/slurmdbd.conf
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
     expose:
@@ -71,6 +74,7 @@ services:
     volumes:
       - etc_munge:/etc/munge
       - etc_slurm:/etc/slurm
+      - ./slurmdbd.conf:/etc/slurm/slurmdbd.conf
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
     expose:
